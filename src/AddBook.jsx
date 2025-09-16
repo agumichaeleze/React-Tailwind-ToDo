@@ -11,11 +11,11 @@ function AddBook (){
            <div className="mt-5 flex items-center justify-center">
              <input type="text"
             placeholder="Enter book..."
-            className="border outline-0 px-4 py-2 rounded-l-md text-base md:text-2xl w-1/3 md:w-full"
+            className="border outline-0 px-4 py-2 rounded-l-md text-base md:text-2xl"
             value={newBook}
              onChange={(e) => setNewBook(e.target.value)}
             />
-            <button className="bg-green-950 p-2.5 text-xs md:p-3.5 rounded-r-md cursor-pointer hover:bg-green-900 transition-all"
+            <button className="bg-green-950 p-3 text-xs md:textlg md:p-4 rounded-r-md cursor-pointer hover:bg-green-900 transition-all"
             onClick={() =>{ handleAddBook(newBook);
                 setNewBook("")
             }}>
