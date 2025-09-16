@@ -15,7 +15,7 @@ function AddBook (){
             value={newBook}
              onChange={(e) => setNewBook(e.target.value)}
             />
-            <button className="bg-green-950 p-3 text-xs md:textlg md:p-4 rounded-r-md cursor-pointer hover:bg-green-900 transition-all"
+            <button className="bg-green-950 w-1/3 md:w-1/6 p-3 text-xs md:textlg md:p-4 rounded-r-md cursor-pointer hover:bg-green-900 transition-all"
             onClick={() =>{ handleAddBook(newBook);
                 setNewBook("")
             }}>
