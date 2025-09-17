@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { Trash, Pencil, Check, X } from "lucide-react";
 
 function BooksToRead () {
 
@@ -12,6 +13,8 @@ function BooksToRead () {
     const [addBook, setAddBook] = useState("");
     const [search, setSearch] = useState("");
     const [isHidden, setIsHidden] = useState(false);
+    const [editingTitle, setEditingTitle] = useState(null);
+    const [newTitle, setNewTitle] = useState("");
 
 
     const handleAddBook = () => {
@@ -31,12 +34,9 @@ function BooksToRead () {
             setBooks(books.filter((book) => book.title !== titleToDelete));
     };
 
-      // ✅ Toggle Completed
-    const handleToggleComplete = (bookTitle) => {
-        setBooks(books.map((book) =>book.title === bookTitle
-            ? { ...book, completed: !book.completed }
-            : book
-        )
+    const handleEditBook = (oldTitle, newTitle) => {
+        setBooks(
+            books.map((book) => book.title === oldTitle ? {...book, title: newTitle.toUpperCase()} : book)
         );
     };
 
@@ -60,27 +60,63 @@ function BooksToRead () {
                         filteredBooks.map((book, index) => (
                             <li key={index} className="py-2">
                                 <div className="flex justify-between items-center bg-slate-800 text-gray-200 px-4 py-2 rounded-md shadow">
-                                    {/* ✅ Show completed with line-through */}
-                                    <span className={`cursor-pointer ${book.completed ? "line-through text-gray-400" : ""}`}
-                                    onClick={() => handleToggleComplete(book.title)}>
-                                        {book.title}
-                                    </span>
-                                    <div className="space-x-2">
-                                        {/* COMPLETE / UNDO BUTTON */}
-                                        <button className={`${book.completed ? "bg-yellow-600 hover:bg-yellow-700" :
-                                        "bg-blue-600 hover:bg-blue-700"}
-                                        text-white px-3 py-1 rounded-md cursor-pointer transition`}
-                                        onClick={() => handleToggleComplete(book.title)}>
-                                            {book.completed ? "Undo" : "Complete"}
-                                        </button>
+                                    {/* if this book is being edited */}
+                                    {editingTitle === book.title ? 
+                                    (<input
+                                        type="text"
+                                        className="px-2 py-1 rounded text-white"
+                                        value={newTitle} 
+                                        onChange={(e) => setNewTitle(e.target.value)}
+                                        onKeyDown={(e) =>{
+                                            if (e.key === "Enter"){
+                                                handleEditBook(book.title, newTitle)
+                                            }
+                                        }}
+                                    />
+                                    ) : (
+                                    <span>{book.title}</span>
+                                    )}
 
-                                        {/* DELETE BUTTON */}
-                                        <button
-                                            className="bg-red-600 text-white px-3 py-1 rounded-md cursor-pointer hover:bg-red-700 transition"
-                                            onClick={() => handleDelete(book.title)}>
-                                            Delete
-                                        </button>
+                                    {/* actions */}
+                                    <div className=" flex space-x-2">
+                                        {editingTitle === book.title ? (
+                                            <>
+                                                {/* Save */}
+                                                <button
+                                                className="text-green-500"
+                                                onClick={() => {
+                                                    handleEditBook(book.title, newTitle);
+                                                    setEditingTitle(null);
+                                                }}>
+                                                    <Check />
+                                                </button>
+                                                {/* Cancel */}
+                                                <button className="text-gray-400"
+                                                onClick={() => setEditingTitle(null)}
+                                                >
+                                                <X size={18} /></button>
+                                            </>
+                                        ) : (
+                                            <>
+                                                {/* Edit */}
+                                                <button
+                                                className="text-yellow-400"
+                                                onClick={() => {
+                                                    setEditingTitle(book.title);
+                                                    setNewTitle(book.title);
+                                                }}>
+                                                    <Pencil size={20} />
+                                                </button>
+                                                {/* DELETE BUTTON */}
+                                                <button
+                                                    className=" text-red-600 hover:text-red-700 py-1 rounded-md cursor-pointer transition"
+                                                    onClick={() => handleDelete(book.title)}>
+                                                    <Trash size={18}/>
+                                                </button>
+                                            </>
+                                        )}
                                     </div>
+                                        
                                 </div>                    
                             </li>
                         ))

@@ -23,19 +23,19 @@ export function BookProvider ({children}) {
 
     const handleDelete = (titleToDelete) => {
             setBooks(books.filter((book) => book.title !== titleToDelete));
-    }; 
+    };   
 
-    const handleToggleComplete = (bookTitle) => {
-        setBooks(books.map((book) => book.title === bookTitle
-            ? { ...book, completed: !book.completed }
-            : book
-            )
-        );
-    };    
-
-
+    const handleEditBook = (oldTitle, newTitle) => {
+        setBooks(
+            books.map((book) =>
+            book.title === oldTitle
+                ? { ...book, title: newTitle.toUpperCase() }
+                : book
+        )
+    );
+};
     return(
-        <booksContext.Provider value={{ books, search, setSearch, handleAddBook, handleDelete, handleToggleComplete, isHidden, setIsHidden,  }}>
+        <booksContext.Provider value={{ books, search, setSearch, handleAddBook, handleDelete, isHidden, setIsHidden, handleEditBook }}>
             {children}
         </booksContext.Provider>
     );
